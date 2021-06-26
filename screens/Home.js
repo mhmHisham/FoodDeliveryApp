@@ -3,7 +3,7 @@ import {  View ,Text , SafeAreaView ,StyleSheet , TouchableOpacity , FlatList , 
 import { COLORS ,icons , SIZES , FONTS ,images } from '../constants';
 
 
-const Home = () =>{
+const Home = ({navigation}) =>{
     
     // Dummy Datas
 
@@ -77,7 +77,7 @@ const Home = () =>{
     const restaurantData = [
         {
             id: 1,
-            name: "ByProgrammers Burger",
+            name: "Programmers Burger",
             rating: 4.8,
             categories: [5, 7],
             priceRating: affordable,
@@ -120,7 +120,7 @@ const Home = () =>{
         },
         {
             id: 2,
-            name: "ByProgrammers Pizza",
+            name: "Programmers Pizza",
             rating: 4.8,
             categories: [2, 4, 6],
             priceRating: expensive,
@@ -171,7 +171,7 @@ const Home = () =>{
         },
         {
             id: 3,
-            name: "ByProgrammers Hotdogs",
+            name: "Programmers Hotdogs",
             rating: 4.8,
             categories: [3],
             priceRating: expensive,
@@ -198,7 +198,7 @@ const Home = () =>{
         },
         {
             id: 4,
-            name: "ByProgrammers Sushi",
+            name: "Programmers Sushi",
             rating: 4.8,
             categories: [8],
             priceRating: expensive,
@@ -225,7 +225,7 @@ const Home = () =>{
         },
         {
             id: 5,
-            name: "ByProgrammers Cuisine",
+            name: "Programmers Cuisine",
             rating: 4.8,
             categories: [1, 2],
             priceRating: affordable,
@@ -278,7 +278,7 @@ const Home = () =>{
         {
 
             id: 6,
-            name: "ByProgrammers Dessets",
+            name: "Programmers Dessets",
             rating: 4.9,
             categories: [9, 10],
             priceRating: affordable,
@@ -477,9 +477,15 @@ const Home = () =>{
 
     function renderResturantList() {
 
-       const renderItem =({item}) =>(
+       const renderItem =({item }) =>(
 
-            <TouchableOpacity style={{paddingBottom:SIZES.padding}}>
+            <TouchableOpacity 
+                style={{paddingBottom:SIZES.padding}} 
+                onPress={() => navigation.navigate("Resturant", {
+                    item,
+                    currentLocation
+                })}
+            >
                 <View>
                     <Image
 
