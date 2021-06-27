@@ -10,13 +10,68 @@ const Resturant = ( {route, navigation}) => {
     const scrollX = new Animated.Value(0);
     const [resturant , setResturant] = useState(null)
     const [currentLocation , setCurrentLocation] =useState(null)
-
+    const  [orderItems , setOrderItems] = useState([])
     useEffect(()=> {
         let {item , currentLocation } =route.params;
 
         setResturant(item)
         setCurrentLocation(currentLocation)
     })
+
+    function editOrder(action , menuId , price){
+        let orderList = orderItems.slice()
+        let item =orderList.filter(res => res.menuId == menuId);
+
+        if(action == "+"){
+            if(item.length > 0){
+               let newQty = item[0].qty +1 
+               item[0].qty =newQty
+               item[0].total = item[0].qty * price  //update total
+            }
+            else{
+                const newItem ={
+                    menuId:menuId,
+                    qty :1 ,
+                    price:price,
+                    total:price
+                }
+                orderList.push(newItem)
+            }
+
+            setOrderItems(orderList)
+        }else{
+            if(item.length > 0){
+                if(item[0].qty >0){
+                    let newQty = item[0].qty -1
+                    item[0].qty = newQty
+                    item.total = item[0].qty * price
+                }
+            }
+            setOrderItems(orderList)
+        }
+    }
+
+    function getOrderQty(menuId){
+        let orderItem = orderItems.filter(res => res.menuId == menuId)
+
+        if(orderItem.length > 0){
+            return orderItem[0].qty 
+        }else{
+            return 0
+        }
+    }
+
+    function getBasketCount(){
+        let itemCount = orderItems.reduce((a,b) => a + (b.qty || 0), 0)
+
+        return itemCount
+    }
+
+    function sumOrder(){
+        let total = orderItems.reduce((a,b) => a+ (b.total || 0) , 0)
+
+        return total.toFixed(2);
+    }
 
     function renderHeader(){
         return(
@@ -123,7 +178,9 @@ const Resturant = ( {route, navigation}) => {
                                             borderBottomLeftRadius:25,
                                             borderTopLeftRadius:25
                                         }
-                                    }>
+                                    }
+                                    onPress={() => editOrder("-" , item.menuId , item.price)}
+                                    >
                                         <Text style={{...FONTS.body1}}> - </Text>
                                     </TouchableOpacity>
                                     <View style={
@@ -134,7 +191,7 @@ const Resturant = ( {route, navigation}) => {
                                             alignItems:'center',
                                         }
                                     }>
-                                        <Text style={{...FONTS.body2}}> 5 </Text>
+                                        <Text style={{...FONTS.body2}}> {getOrderQty(item.menuId)} </Text>
                                     </View>
 
                                     <TouchableOpacity style={
@@ -145,8 +202,10 @@ const Resturant = ( {route, navigation}) => {
                                             alignItems:'center',
                                             borderBottomRightRadius:25,
                                             borderTopRightRadius:25
-                                        }
-                                    }>
+                                        }           
+                                    }
+                                    onPress={() => editOrder("+" , item.menuId , item.price)}
+                                    >
                                         <Text style={{...FONTS.body1}}> + </Text>
                                     </TouchableOpacity>
                                 </View>
@@ -274,8 +333,8 @@ const Resturant = ( {route, navigation}) => {
                             paddingVertical:SIZES.padding*2
                         }
                     }>
-                        <Text style={{...FONTS.body2}}>Items In Card</Text>
-                        <Text style={{...FONTS.body2}}>$ 10.00</Text>
+                        <Text style={{...FONTS.body2}}>{getBasketCount()}  Items In Card</Text>
+                        <Text style={{...FONTS.body2}}>$ {sumOrder()}</Text>
                     </View>
                     <View style={
                         {
@@ -311,7 +370,12 @@ const Resturant = ( {route, navigation}) => {
                             borderRadius:SIZES.radius,
                             alignItems:'center',
                             backgroundColor:COLORS.primary
-                        }}>
+                        }}
+                        onPress ={() => navigation.navigate("OrderDelivery" , {
+                            resturant:resturant,
+                            currentLocation:currentLocation
+                        })}
+                        >
                             <Text style={{ color:COLORS.white , ...FONTS.h2}}>Order</Text>
                         </TouchableOpacity>
                     </View>
