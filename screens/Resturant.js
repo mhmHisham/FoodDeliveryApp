@@ -64,7 +64,7 @@ const Resturant = ( {route, navigation}) => {
     function getBasketCount(){
         let itemCount = orderItems.reduce((a,b) => a + (b.qty || 0), 0)
 
-        return itemCount
+        return itemCount;
     }
 
     function sumOrder(){
@@ -72,6 +72,7 @@ const Resturant = ( {route, navigation}) => {
 
         return total.toFixed(2);
     }
+
 
     function renderHeader(){
         return(
@@ -375,6 +376,7 @@ const Resturant = ( {route, navigation}) => {
                             resturant:resturant,
                             currentLocation:currentLocation
                         })}
+                        disabled = { orderItems.length > 0 ? false :true }
                         >
                             <Text style={{ color:COLORS.white , ...FONTS.h2}}>Order</Text>
                         </TouchableOpacity>
