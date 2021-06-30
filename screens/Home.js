@@ -10,8 +10,8 @@ const Home = ({navigation}) =>{
     const initialCurrentLocation = {
         streetName: "COLOMBO",
         gps: {
-            latitude: 6.927079,
-            longitude: 79.861244,
+            latitude: 1.5496614931250685,
+            longitude: 110.36381866919922
         }
     }
 
